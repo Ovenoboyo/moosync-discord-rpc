@@ -1,10 +1,22 @@
 {
-    "compilerOptions": {
-      "outDir": "./build/",
-      "noImplicitAny": true,
-      "target": "es5",
-      "sourceMap": true,
-      "allowJs": true,
-      "lib": [ "es2015", "dom"]
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "paths": {
+      "*": [
+        "./src/types/*"
+      ]
     }
-  }
+  },
+  "typeRoots": [
+    "./node_modules",
+    "./node_modules/@types",
+    "./src/types"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+  ]
+}
