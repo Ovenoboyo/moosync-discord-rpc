@@ -1,32 +1,41 @@
 import { MoosyncExtensionTemplate } from "@moosync/moosync-types";
-import { PlayerState, Song, SongQueue } from "@moosync/moosync-types/models";
 import { logger } from '@moosync/moosync-types'
+import { PlayerState } from "@moosync/moosync-types/models";
+import { rpc, setActivity, login } from './rpcHandler'
 
 
 export class MyExtension implements MoosyncExtensionTemplate {
     private logger: logger
+    private started = false
+    private state: PlayerState = 'PAUSED'
+    private song: Song | undefined
 
     constructor(logger: logger) {
         this.logger = logger
     }
 
     onStarted(): void {
-        this.logger.info('extension started')
+        console.log('started')
+        rpc.on('ready', () => {
+            this.started = true
+        })
+        login()
     }
 
     onSongChanged(song: Song) {
-        this.logger.info(song)
+        this.song = song
+        this.setActivity(0)
     }
 
     onPlayerStateChanged(state: PlayerState) {
-        this.logger.info(state)
+        this.state = state
+        this.setActivity()
     }
 
-    onSongQueueChanged(queue: SongQueue) {
-        this.logger.info(queue)
-    }
-
-    onVolumeChanged(volume: number) {
-        this.logger.info(volume)
+    private async setActivity(time?: number) {
+        if (this.started) {
+            const curTime = Date.now() - (time ?? await api.getTime()) * 1e3
+            setActivity(this.song, this.state, curTime)
+        }
     }
 }
