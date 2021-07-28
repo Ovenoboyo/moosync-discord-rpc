@@ -10,3 +10,4 @@ interface extensionAPI {
 }
 
 declare const api: extensionAPI
+declare const logger: import('winston').Logger

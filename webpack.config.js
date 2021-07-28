@@ -3,7 +3,6 @@ var path = require('path');
 module.exports = {
     entry: './src/index.ts',
     target: "node",
-    devtool: 'inline-source-map',
     mode: "production",
     output: {
         path: path.resolve(__dirname, 'dist'),
