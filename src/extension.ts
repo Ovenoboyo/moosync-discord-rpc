@@ -1,32 +1,24 @@
 import { MoosyncExtensionTemplate } from "@moosync/moosync-types";
 import { PlayerState, Song, SongQueue } from "@moosync/moosync-types/models";
-import { logger } from '@moosync/moosync-types'
-
 
 export class MyExtension implements MoosyncExtensionTemplate {
-    private logger: logger
-
-    constructor(logger: logger) {
-        this.logger = logger
-    }
-
     onStarted(): void {
-        this.logger.info('extension started')
+        logger.info('Extension started')
     }
 
     onSongChanged(song: Song) {
-        this.logger.info(song)
+        console.log(song)
     }
 
     onPlayerStateChanged(state: PlayerState) {
-        this.logger.info(state)
+        console.log(state)
     }
 
     onSongQueueChanged(queue: SongQueue) {
-        this.logger.info(queue)
+        console.log(queue)
     }
 
     onVolumeChanged(volume: number) {
-        this.logger.info(volume)
+        console.log(volume)
     }
 }
