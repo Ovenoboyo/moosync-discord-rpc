@@ -7,6 +7,19 @@ interface RPCMessage {
     nonce: string
 }
 
+interface RPCClientOptions {
+    transport: 'ipc';
+}
+
+interface RPCLoginOptions {
+    clientId: string;
+    clientSecret?: string | undefined;
+    accessToken?: string | undefined;
+    rpcToken?: string | undefined;
+    tokenEndpoint?: string | undefined;
+    scopes?: string[] | undefined;
+}
+
 interface IPCActivity {
     state?: string
     details?: string

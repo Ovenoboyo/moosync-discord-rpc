@@ -1,4 +1,3 @@
-import { RPCClientOptions, RPCLoginOptions } from "discord-rpc";
 import EventEmitter from "events";
 import { IPCTransport } from "./ipcTransport";
 import { uuid4122 } from "./utils";
