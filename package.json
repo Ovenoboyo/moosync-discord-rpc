@@ -25,8 +25,8 @@
     "@types/discord-rpc": "^3.0.6",
     "@types/node": "^16.4.0",
     "bufferutil": "^4.0.3",
-    "discord-rpc": "^4.0.1",
     "electron": "^13.1.7",
+    "register-scheme": "^0.0.2",
     "utf-8-validate": "^5.0.5",
     "winston": "^3.3.3"
   }

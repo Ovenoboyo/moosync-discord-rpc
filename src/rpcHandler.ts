@@ -1,11 +1,25 @@
 import { PlayerState } from '@moosync/moosync-types/models';
-import { Client as ClientRPC, register } from 'discord-rpc'
+import { Client as ClientRPC } from './discordRPC/client'
 
 const clientID = '867757838679670784'
 
+let register;
+try {
+    const { app } = require('electron');
+    register = app.setAsDefaultProtocolClient.bind(app);
+} catch (err) {
+    try {
+        register = require('register-scheme');
+    } catch (e) { } // eslint-disable-line no-empty
+}
+
+if (typeof register !== 'function') {
+    register = () => false;
+}
+
 register(clientID)
 
-export const rpc = new ClientRPC({ transport: 'ipc' });
+export const rpc = new ClientRPC(clientID, { transport: 'ipc' });
 
 export function login() {
     rpc.login({ clientId: clientID }).catch(e => console.log(e))
