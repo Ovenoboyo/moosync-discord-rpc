@@ -22,8 +22,5 @@
     "webpack-cli": "^4.7.2",
     "winston": "^3.3.3"
   },
-  "dependencies": {
-    "bufferutil": "^4.0.3",
-    "register-scheme": "^0.0.2"
-  }
+  "dependencies": {}
 }
