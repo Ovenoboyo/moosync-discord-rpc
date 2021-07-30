@@ -1,5 +1,5 @@
 import { MoosyncExtensionTemplate } from "@moosync/moosync-types";
-import { PlayerState } from "@moosync/moosync-types/models";
+import { PlayerState, Song } from "@moosync/moosync-types/models";
 import { listenOnReady, setActivity, login, close } from './rpcHandler'
 
 
@@ -9,7 +9,11 @@ export class MyExtension implements MoosyncExtensionTemplate {
     private song: Song | undefined | null
 
     onStarted(): void {
-        listenOnReady(() => this.started = true)
+        listenOnReady(async () => {
+            this.started = true
+            this.state = await api.getPlayerState()
+            this.setActivity()
+        })
         login()
     }
 
