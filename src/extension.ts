@@ -1,6 +1,6 @@
 import { MoosyncExtensionTemplate } from "@moosync/moosync-types";
 import { PlayerState } from "@moosync/moosync-types/models";
-import { rpc, setActivity, login } from './rpcHandler'
+import { listenOnReady, setActivity, login, close } from './rpcHandler'
 
 
 export class MyExtension implements MoosyncExtensionTemplate {
@@ -9,10 +9,12 @@ export class MyExtension implements MoosyncExtensionTemplate {
     private song: Song | undefined | null
 
     onStarted(): void {
-        rpc.on('ready', () => {
-            this.started = true
-        })
+        listenOnReady(() => this.started = true)
         login()
+    }
+
+    onStopped() {
+        close()
     }
 
     onSongChanged(song: Song | null) {
@@ -23,6 +25,10 @@ export class MyExtension implements MoosyncExtensionTemplate {
     onPlayerStateChanged(state: PlayerState) {
         this.state = state
         this.setActivity()
+    }
+
+    onSeeked(time: number) {
+        this.setActivity(time)
     }
 
     private async requestSong() {

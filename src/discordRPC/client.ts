@@ -216,7 +216,15 @@ export class Client {
         return this.setActivity({}, pid)
     }
 
+    public async destroy() {
+        await this.transport.close();
+    }
+
     public on(event: string | symbol, listener: (...args: any[]) => void): EventEmitter {
         return this.eventHandler.on(event, listener)
+    }
+
+    public once(event: string | symbol, listener: (...args: any[]) => void): EventEmitter {
+        return this.eventHandler.once(event, listener)
     }
 }
