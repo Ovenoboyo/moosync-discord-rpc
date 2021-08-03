@@ -200,11 +200,11 @@ export class Client {
 
         activity.party = { id: args.partyId, size: (args.partySize && args.partyMax) ? [args.partySize, args.partyMax] : undefined }
 
-        activity.secrets = {
-            match: args.matchSecret,
-            join: args.joinSecret,
-            spectate: args.spectateSecret,
-        };
+        // activity.secrets = {
+        //     match: args.matchSecret,
+        //     join: args.joinSecret,
+        //     spectate: args.spectateSecret,
+        // };
 
         return this.request('SET_ACTIVITY', {
             pid,

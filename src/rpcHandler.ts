@@ -38,6 +38,15 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
         return;
     }
 
+    const buttons: ActivityButton[] = []
+    if (song.type !== 'LOCAL') {
+        console.log(song)
+        song.playbackUrl && buttons.push({ label: 'Show on Youtube', url: `https://www.youtube.com/watch?v=${song.playbackUrl}` })
+
+        if (song.url)
+            if (song.type === 'SPOTIFY') buttons.push({ label: `Show on Spotify`, url: `https://open.spotify.com/track/${song.url}` })
+    }
+
     try {
         await rpc.setActivity({
             details: `${song.title} ${status === 'PAUSED' ? '(Paused)' : ''}`,
@@ -45,6 +54,7 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
             largeImageKey: 'default',
             largeImageText: 'Moosync',
             instance: true,
+            buttons,
             startTimestamp: (status === 'PLAYING') ? (time ?? Date.now()) : undefined,
         });
     } catch (e) {

@@ -20,6 +20,8 @@ interface RPCLoginOptions {
     scopes?: string[] | undefined;
 }
 
+interface ActivityButton { label: string; url: string }
+
 interface IPCActivity {
     state?: string
     details?: string
@@ -42,7 +44,7 @@ interface IPCActivity {
         join: string,
         spectate: string,
     },
-    buttons?: any,
+    buttons?: ActivityButton[],
     instance?: boolean,
 }
 
