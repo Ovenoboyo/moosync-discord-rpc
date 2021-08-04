@@ -120,9 +120,6 @@ export class Client {
                 this.application = application;
                 this.user = user;
 
-                console.log(application)
-                console.log(user)
-
                 this.eventHandler.emit('ready');
             });
     }

@@ -12,7 +12,7 @@ export function listenOnReady(callback: Function) {
 }
 
 export function login() {
-    rpc.login({ clientId: clientID }).catch(e => console.log(e))
+    rpc.login({ clientId: clientID }).catch(e => logger.error(e))
 }
 
 export function close() {
