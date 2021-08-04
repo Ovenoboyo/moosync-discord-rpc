@@ -57,6 +57,6 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
             startTimestamp: (status === 'PLAYING') ? (time ?? Date.now()) : undefined,
         });
     } catch (e) {
-        logger.log('error', 'Failed to set RichPresence activity', (e as Error).message)
+        logger.error('error', 'Failed to set RichPresence activity', (e as Error).message)
     }
 }
