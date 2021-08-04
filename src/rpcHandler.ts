@@ -40,7 +40,6 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
 
     const buttons: ActivityButton[] = []
     if (song.type !== 'LOCAL') {
-        console.log(song)
         song.playbackUrl && buttons.push({ label: 'Show on Youtube', url: `https://www.youtube.com/watch?v=${song.playbackUrl}` })
 
         if (song.url)
@@ -58,6 +57,6 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
             startTimestamp: (status === 'PLAYING') ? (time ?? Date.now()) : undefined,
         });
     } catch (e) {
-        logger.log('error', 'Failed to set RichPresence activity: %j', (e as Error).message)
+        logger.log('error', 'Failed to set RichPresence activity', (e as Error).message)
     }
 }
