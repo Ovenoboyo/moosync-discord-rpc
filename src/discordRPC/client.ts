@@ -176,8 +176,11 @@ export class Client {
         let activity: IPCActivity = {
             state: args.state,
             details: args.details,
-            buttons: args.buttons,
             instance: !!args.instance
+        }
+
+        if (args.buttons.length > 0) {
+            activity.buttons = args.buttons
         }
 
         if (args.startTimestamp || args.endTimestamp) {
