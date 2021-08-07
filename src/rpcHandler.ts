@@ -50,7 +50,7 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
         await rpc.setActivity({
             details: `${song.title} ${status === 'PAUSED' ? '(Paused)' : ''}`,
             state: getStateDetails(song),
-            largeImageKey: 'default',
+            largeImageKey: 'logo_border',
             largeImageText: 'Moosync',
             instance: true,
             buttons,
