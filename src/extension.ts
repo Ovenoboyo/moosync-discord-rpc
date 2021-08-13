@@ -17,8 +17,8 @@ export class MyExtension implements MoosyncExtensionTemplate {
         login()
     }
 
-    onStopped() {
-        close()
+    async onStopped() {
+        await close()
     }
 
     onSongChanged(song: Song | null) {

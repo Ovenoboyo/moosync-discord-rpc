@@ -15,9 +15,9 @@ export function login() {
     rpc.login({ clientId: clientID }).catch(e => logger.error(e))
 }
 
-export function close() {
+export async function close() {
     rpc.clearActivity()
-    rpc.destroy()
+    await rpc.destroy()
 }
 
 function getStateDetails(song: Song) {
