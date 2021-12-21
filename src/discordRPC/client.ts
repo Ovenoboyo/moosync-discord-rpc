@@ -71,7 +71,7 @@ export class Client {
     }
 
 
-    private request(cmd: RPCCommands, args: any, evt?: Event): any {
+    private request(cmd: RPCCommands, args: any, evt?: Event): Promise<any> {
         return new Promise((resolve, reject) => {
             const nonce = uuid4122();
             this.transport.send({ cmd, args, evt, nonce });
@@ -171,7 +171,8 @@ export class Client {
         }
     }
 
-    public setActivity(args: RichPresence, pid = process.pid) {
+    public async setActivity(args?: RichPresence, pid = process.pid) {
+        args = args ?? {}
 
         let activity: IPCActivity = {
             state: args.state,
@@ -179,7 +180,7 @@ export class Client {
             instance: !!args.instance
         }
 
-        if (args.buttons.length > 0) {
+        if (args.buttons && args.buttons.length > 0) {
             activity.buttons = args.buttons
         }
 

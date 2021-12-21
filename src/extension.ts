@@ -8,7 +8,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     private state: PlayerState = 'PAUSED'
     private song: Song | undefined | null
 
-    onStarted(): void {
+    async onStarted() {
         listenOnReady(async () => {
             this.started = true
             this.state = await api.getPlayerState()
@@ -18,20 +18,21 @@ export class MyExtension implements MoosyncExtensionTemplate {
     }
 
     async onStopped() {
+        console.log('closing')
         await close()
     }
 
-    onSongChanged(song: Song | null) {
+    async onSongChanged(song: Song | null) {
         this.song = song
         this.setActivity(0)
     }
 
-    onPlayerStateChanged(state: PlayerState) {
+    async onPlayerStateChanged(state: PlayerState) {
         this.state = state
         this.setActivity()
     }
 
-    onSeeked(time: number) {
+    async onSeeked(time: number) {
         this.setActivity(time)
     }
 

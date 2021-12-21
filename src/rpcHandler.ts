@@ -16,8 +16,11 @@ export function login() {
 }
 
 export async function close() {
-    rpc.clearActivity()
-    await rpc.destroy()
+    try {
+        await rpc.destroy()
+    } catch (e) {
+        logger.error(e)
+    }
 }
 
 function getStateDetails(song: Song) {
