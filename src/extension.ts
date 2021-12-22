@@ -18,7 +18,6 @@ export class MyExtension implements MoosyncExtensionTemplate {
     }
 
     async onStopped() {
-        console.log('closing')
         await close()
     }
 

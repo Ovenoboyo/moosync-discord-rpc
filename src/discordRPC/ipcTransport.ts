@@ -89,7 +89,7 @@ export class IPCTransport {
         }
 
         let raw: any;
-        if (working.full === '') {
+        if (working && working.full === '') {
             working.op = packet.readInt32LE(0);
             const len = packet.readInt32LE(4);
             raw = packet.slice(8, len + 8);
@@ -99,7 +99,7 @@ export class IPCTransport {
 
         try {
             const data = JSON.parse(working.full + raw);
-            return { data, op: working.op }
+            return { data, op: working ? working.op : OPCodes.CLOSE }
         } catch (err) {
             working.full += raw;
         }
@@ -126,22 +126,25 @@ export class IPCTransport {
         this.eventHandler.emit('message', data);
     }
 
-    private handleCloseCall(data: any) {
+    private handleCloseCall(data?: any) {
         this.eventHandler.emit('close', data);
     }
 
-    private async onReadable({ op, data }) {
-        if (op === OPCodes.PING) {
-            return this.handlePingCall(data)
-        }
+    private async onReadable(d: { op: number, data: any }) {
+        if (d) {
+            if (d.op === OPCodes.PING) {
+                return this.handlePingCall(d.data)
+            }
 
-        if (op === OPCodes.FRAME) {
-            return this.handleFrameCall(data)
-        }
+            if (d.op === OPCodes.FRAME) {
+                return this.handleFrameCall(d.data)
+            }
 
-        if (op === OPCodes.CLOSE) {
-            return this.handleCloseCall(data)
+            if (d.op === OPCodes.CLOSE) {
+                return this.handleCloseCall(d.data)
+            }
         }
+        return this.handleCloseCall()
     }
 
     public async connect() {
@@ -165,9 +168,9 @@ export class IPCTransport {
     }
 
     public async close() {
-        return new Promise((r) => {
+        return new Promise<void>((r) => {
             this.eventHandler.once('close', r);
-            this.send({}, OPCodes.CLOSE);
+            this.send('', OPCodes.CLOSE);
             this.socket.end();
         });
     }
