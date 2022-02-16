@@ -81,7 +81,6 @@ export class Client {
 
     private getRejectTimeout(reject: (reason: any) => void) {
         const timeout = setTimeout(() => reject(new Error('RPC_CONNECTION_TIMEOUT')), 10e3);
-        timeout.unref();
         return timeout
     }
 
@@ -127,6 +126,7 @@ export class Client {
     public async login(options: RPCLoginOptions): Promise<void> {
         let { accessToken } = options;
         await this.connect();
+
         if (!options.scopes) {
             this.eventHandler.emit('ready');
             return;
