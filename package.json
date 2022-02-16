@@ -1,6 +1,6 @@
 {
   "name": "discord.rich.presence",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "src/index.ts",
   "extensionEntry": "dist/index.js",
@@ -9,7 +9,7 @@
   "scripts": {
     "watch:build": "webpack --watch",
     "webpack:build": "webpack --config webpack.config.js",
-    "build": "npm run webpack:build && mopack --path ."
+    "build": "yarn run webpack:build && mopack --path ."
   },
   "author": "Sahil Gupte",
   "devDependencies": {

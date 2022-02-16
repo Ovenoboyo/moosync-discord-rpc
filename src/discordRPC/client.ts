@@ -81,7 +81,6 @@ export class Client {
 
     private getRejectTimeout(reject: (reason: any) => void) {
         const timeout = setTimeout(() => reject(new Error('RPC_CONNECTION_TIMEOUT')), 10e3);
-        timeout.unref();
         return timeout
     }
 
@@ -97,7 +96,10 @@ export class Client {
         }
 
         return this.connectPromise = new Promise((resolve, reject) => {
+            console.log('creating cnnect promise')
             const timeout = this.getRejectTimeout(reject)
+
+            console.log(timeout)
 
             this.eventHandler.once('connected', () => {
                 clearTimeout(timeout);
@@ -126,7 +128,11 @@ export class Client {
 
     public async login(options: RPCLoginOptions): Promise<void> {
         let { accessToken } = options;
+
+        console.log(options)
         await this.connect();
+
+        console.log('connected')
         if (!options.scopes) {
             this.eventHandler.emit('ready');
             return;
@@ -173,6 +179,8 @@ export class Client {
 
     public async setActivity(args?: RichPresence, pid = process.pid) {
         args = args ?? {}
+
+        console.log('args', args)
 
         let activity: IPCActivity = {
             state: args.state,
