@@ -13,7 +13,7 @@
   },
   "author": "Sahil Gupte",
   "devDependencies": {
-    "@moosync/moosync-types": "^1.2.0",
+    "@moosync/moosync-types": "^1.2.4",
     "@moosync/packer": "^0.1.2",
     "@types/node": "^16.11.6",
     "ts-loader": "^9.2.6",
