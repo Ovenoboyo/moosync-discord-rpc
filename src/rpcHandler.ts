@@ -5,9 +5,10 @@ const clientID = '867757838679670784'
 
 const rpc = new ClientRPC(clientID, { transport: 'ipc' })
 
-export function login() {
+export function login(onCloseCallback: () => void) {
   return new Promise<void>((resolve, reject) => {
     rpc.once('ready', resolve)
+    rpc.once('close', onCloseCallback)
     rpc.login({ clientId: clientID }).catch(reject)
   })
 }

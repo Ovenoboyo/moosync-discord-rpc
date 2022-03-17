@@ -15,7 +15,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     logger.debug('Trying to login to discord')
 
     try {
-      await login()
+      await login(() => (this.started = false))
       logger.debug('Logged in successfully')
       this.started = true
       this.state = await api.getPlayerState()
