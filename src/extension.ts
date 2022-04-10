@@ -75,8 +75,8 @@ export class MyExtension implements MoosyncExtensionTemplate {
   }
 
   private registerListeners() {
-    api.on('seeked', this.onSeeked)
-    api.on('playerStateChanged', this.onPlayerStateChanged)
-    api.on('songChanged', this.onSongChanged)
+    api.on('seeked', this.onSeeked.bind(this))
+    api.on('playerStateChanged', this.onPlayerStateChanged.bind(this))
+    api.on('songChanged', this.onSongChanged.bind(this))
   }
 }
