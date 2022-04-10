@@ -87,6 +87,7 @@ export class Client {
       e.reject(new Error('connection closed'))
     })
   }
+
   private async connect() {
     if (this.connectPromise) {
       return this.connectPromise

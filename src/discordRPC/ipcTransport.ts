@@ -167,7 +167,9 @@ export class IPCTransport {
   }
 
   public send(data: any, op = OPCodes.FRAME) {
-    this.socket.write(this.encode(op, data))
+    if (this.socket) {
+      this.socket.write(this.encode(op, data))
+    }
   }
 
   public async close() {

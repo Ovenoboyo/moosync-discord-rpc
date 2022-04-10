@@ -21,7 +21,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
       this.state = await api.getPlayerState()
       this.setActivity()
     } catch (e) {
-      logger.error('Failed discord login', e)
+      logger.warn('Failed discord login', e)
     }
   }
 
