@@ -9,6 +9,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
 
   async onStarted() {
     await this.login()
+    this.registerListeners()
   }
 
   private async login() {
@@ -30,7 +31,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     await close()
   }
 
-  async onSongChanged(song: Song | null) {
+  private async onSongChanged(song: Song | null) {
     if (!this.started) {
       await this.login()
     }
@@ -39,7 +40,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     this.setActivity(0)
   }
 
-  async onPlayerStateChanged(state: PlayerState) {
+  private async onPlayerStateChanged(state: PlayerState) {
     if (!this.started) {
       await this.login()
     }
@@ -48,7 +49,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     this.setActivity()
   }
 
-  async onSeeked(time: number) {
+  private async onSeeked(time: number) {
     if (!this.started) {
       await this.login()
     }
@@ -71,5 +72,11 @@ export class MyExtension implements MoosyncExtensionTemplate {
         setActivity(this.song, this.state, curTime)
       }
     }
+  }
+
+  private registerListeners() {
+    api.on('seeked', this.onSeeked)
+    api.on('playerStateChanged', this.onPlayerStateChanged)
+    api.on('songChanged', this.onSongChanged)
   }
 }
