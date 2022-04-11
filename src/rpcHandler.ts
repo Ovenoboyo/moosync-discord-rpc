@@ -6,6 +6,7 @@ const clientID = '867757838679670784'
 let rpc: ClientRPC | undefined
 
 export function login(onCloseCallback: () => void) {
+  if (rpc) rpc.destroy()
   rpc = new ClientRPC(clientID, { transport: 'ipc' })
   return new Promise<void>((resolve, reject) => {
     rpc.once('ready', resolve)
