@@ -3,9 +3,10 @@ import { Client as ClientRPC } from './discordRPC/client'
 
 const clientID = '867757838679670784'
 
-const rpc = new ClientRPC(clientID, { transport: 'ipc' })
+let rpc: ClientRPC | undefined
 
 export function login(onCloseCallback: () => void) {
+  rpc = new ClientRPC(clientID, { transport: 'ipc' })
   return new Promise<void>((resolve, reject) => {
     rpc.once('ready', resolve)
     rpc.once('close', onCloseCallback)
@@ -15,7 +16,7 @@ export function login(onCloseCallback: () => void) {
 
 export async function close() {
   try {
-    await rpc.destroy()
+    await rpc?.destroy()
   } catch (e) {
     logger.error(e)
   }
