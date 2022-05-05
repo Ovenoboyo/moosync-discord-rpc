@@ -26,7 +26,7 @@ export async function close() {
 function getStateDetails(song: Song) {
   let str = ''
   if (song.artists) {
-    str += song.artists.join(', ')
+    str += song.artists.map((val) => val.artist_name).join(', ')
     str += ' - '
   }
   if (song.album && song.album.album_name) {
