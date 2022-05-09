@@ -28,5 +28,8 @@
       "tsconfig.json",
       "webpack.config.js"
     ]
+  },
+  "dependencies": {
+    "form-data": "^4.0.0"
   }
 }

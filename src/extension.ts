@@ -1,6 +1,6 @@
-import { MoosyncExtensionTemplate } from '@moosync/moosync-types'
+import { MoosyncExtensionTemplate, Buttons } from '@moosync/moosync-types'
 import { PlayerState, Song } from '@moosync/moosync-types/models'
-import { setActivity, login, close } from './rpcHandler'
+import { setActivity, login, close, setApiKey, clearUploadCache } from './rpcHandler'
 
 export class MyExtension implements MoosyncExtensionTemplate {
   private started = false
@@ -9,7 +9,13 @@ export class MyExtension implements MoosyncExtensionTemplate {
 
   async onStarted() {
     await this.login()
+    await this.setImgBBApiKey()
     this.registerListeners()
+  }
+
+  private async setImgBBApiKey() {
+    const key = await api.getPreferences<string>('imgbb_api_key', 'eab106e4b75cd0f0ab32c1955185a7e5')
+    setApiKey(key)
   }
 
   private async login() {
@@ -78,5 +84,14 @@ export class MyExtension implements MoosyncExtensionTemplate {
     api.on('seeked', this.onSeeked.bind(this))
     api.on('playerStateChanged', this.onPlayerStateChanged.bind(this))
     api.on('songChanged', this.onSongChanged.bind(this))
+    api.on('preferenceChanged', async ({ key, value }) => {
+      if (key === 'imgbb_api_key') {
+        setApiKey(value as string)
+      }
+
+      if (key === 'buttons' && (value as Buttons).key === 'clear_cache') {
+        await clearUploadCache()
+      }
+    })
   }
 }
