@@ -25,7 +25,7 @@
     "exclude": [
       "src/**",
       "types/**",
-      "screenshots",
+      "screenshots/**",
       "tsconfig.json",
       "webpack.config.js"
     ]
