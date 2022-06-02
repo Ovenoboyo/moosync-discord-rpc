@@ -97,13 +97,15 @@ export async function setActivity(song: Song | undefined, status: PlayerState, t
   }
 
   const buttons: ActivityButton[] = []
-  if (song.type !== 'LOCAL') {
+  if (song.type === 'YOUTUBE') {
     song.playbackUrl &&
       buttons.push({ label: 'Show on Youtube', url: `https://www.youtube.com/watch?v=${song.playbackUrl}` })
+  }
 
-    if (song.url)
-      if (song.type === 'SPOTIFY')
-        buttons.push({ label: `Show on Spotify`, url: `https://open.spotify.com/track/${song.url}` })
+  if (song.url) {
+    if (song.type === 'SPOTIFY') {
+      buttons.push({ label: `Show on Spotify`, url: `https://open.spotify.com/track/${song.url}` })
+    }
   }
 
   const url =
