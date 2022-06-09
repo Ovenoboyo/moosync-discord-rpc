@@ -31,7 +31,8 @@ export class IPCTransport {
     const {
       env: { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP }
     } = process
-    const prefix = XDG_RUNTIME_DIR || TMPDIR || TMP || TEMP || '/tmp'
+
+    const prefix = `${XDG_RUNTIME_DIR}/app/com.discordapp.Discord` || XDG_RUNTIME_DIR || TMPDIR || TMP || TEMP || '/tmp'
     return `${prefix.replace(/\/$/, '')}/discord-ipc-${id}`
   }
 
