@@ -1,4 +1,5 @@
 import EventEmitter from 'events'
+import { access } from 'fs/promises'
 import net from 'net'
 import { uuid4122 } from './utils'
 
@@ -24,7 +25,16 @@ export class IPCTransport {
     this.clientID = clientID
   }
 
-  private getIPCPath(id) {
+  private async tryAccess(path: string) {
+    try {
+      await access(path)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  private async getIPCPath(id) {
     if (process.platform === 'win32') {
       return `\\\\?\\pipe\\discord-ipc-${id}`
     }
@@ -32,16 +42,24 @@ export class IPCTransport {
       env: { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP }
     } = process
 
-    const prefix = `${XDG_RUNTIME_DIR}/app/com.discordapp.Discord` || XDG_RUNTIME_DIR || TMPDIR || TMP || TEMP || '/tmp'
-    return `${prefix.replace(/\/$/, '')}/discord-ipc-${id}`
+    const prefix = [`${XDG_RUNTIME_DIR}/app/com.discordapp.Discord`, XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP, '/tmp']
+    for (const p of prefix) {
+      const path = `${p.replace(/\/$/, '')}/discord-ipc-${id}`
+      if (await this.tryAccess(path)) {
+        return path
+      }
+    }
+    return ''
   }
 
-  private getIPC(id = 0): Promise<net.Socket> {
+  private async getIPC(id = 0): Promise<net.Socket> {
+    const path = await this.getIPCPath(id)
     return new Promise((resolve, reject) => {
-      const path = this.getIPCPath(id)
       const onerror = () => {
         if (id < 10) {
-          resolve(this.getIPC(id + 1))
+          this.getIPC(id + 1)
+            .then(resolve)
+            .catch(reject)
         } else {
           reject(new Error('Could not connect'))
         }
