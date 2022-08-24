@@ -38,15 +38,15 @@ export class IPCTransport {
     if (process.platform === 'win32') {
       return `\\\\?\\pipe\\discord-ipc-${id}`
     }
-    const {
-      env: { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP }
-    } = process
-
+    const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = process.env
     const prefix = [`${XDG_RUNTIME_DIR}/app/com.discordapp.Discord`, XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP, '/tmp']
+
     for (const p of prefix) {
-      const path = `${p.replace(/\/$/, '')}/discord-ipc-${id}`
-      if (await this.tryAccess(path)) {
-        return path
+      if (p) {
+        const path = `${p.replace(/\/$/, '')}/discord-ipc-${id}`
+        if (await this.tryAccess(path)) {
+          return path
+        }
       }
     }
     return ''
