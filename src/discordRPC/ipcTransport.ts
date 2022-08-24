@@ -55,20 +55,25 @@ export class IPCTransport {
   private async getIPC(id = 0): Promise<net.Socket> {
     const path = await this.getIPCPath(id)
     return new Promise((resolve, reject) => {
-      const onerror = () => {
-        if (id < 10) {
-          this.getIPC(id + 1)
-            .then(resolve)
-            .catch(reject)
-        } else {
-          reject(new Error('Could not connect'))
+      if (path) {
+        const onerror = () => {
+          if (id < 10) {
+            this.getIPC(id + 1)
+              .then(resolve)
+              .catch(reject)
+          } else {
+            reject(new Error('Could not connect'))
+          }
         }
+
+        const sock = net.createConnection(path, () => {
+          sock.removeListener('error', onerror)
+          resolve(sock)
+        })
+        sock.once('error', onerror)
+      } else {
+        reject('Invalid path')
       }
-      const sock = net.createConnection(path, () => {
-        sock.removeListener('error', onerror)
-        resolve(sock)
-      })
-      sock.once('error', onerror)
     })
   }
 
@@ -168,21 +173,25 @@ export class IPCTransport {
   }
 
   public async connect() {
-    this.socket = await this.getIPC()
-    this.socket.on('close', this.onClose.bind(this))
-    this.socket.on('error', this.onClose.bind(this))
-    this.eventHandler.emit('open')
-    this.socket.write(
-      this.encode(OPCodes.HANDSHAKE, {
-        v: 1,
-        client_id: this.clientID
+    try {
+      this.socket = await this.getIPC()
+      this.socket.on('close', this.onClose.bind(this))
+      this.socket.on('error', this.onClose.bind(this))
+      this.eventHandler.emit('open')
+      this.socket.write(
+        this.encode(OPCodes.HANDSHAKE, {
+          v: 1,
+          client_id: this.clientID
+        })
+      )
+      this.socket.pause()
+      this.socket.on('readable', async () => {
+        const data = await this.decode(this.socket)
+        await this.onReadable(data)
       })
-    )
-    this.socket.pause()
-    this.socket.on('readable', async () => {
-      const data = await this.decode(this.socket)
-      await this.onReadable(data)
-    })
+    } catch (e) {
+      this.onClose('Failed to get IPC')
+    }
   }
 
   public send(data: any, op = OPCodes.FRAME) {

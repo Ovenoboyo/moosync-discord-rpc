@@ -84,7 +84,7 @@ export class Client {
 
   private closeAllPromises() {
     this.expecting.forEach((e) => {
-      e.reject(new Error('connection closed'))
+      e.reject(new Error('Connection closed. Reason' + e))
     })
   }
 
@@ -101,10 +101,10 @@ export class Client {
         resolve(this)
       })
 
-      this.transport.once('close', () => {
+      this.transport.once('close', (e) => {
         this.closeAllPromises()
         this.eventHandler.emit('disconnected')
-        reject(new Error('connection closed'))
+        reject(new Error('Connection closed. Reason: ' + e))
       })
       this.transport.connect().catch(reject)
     }))
